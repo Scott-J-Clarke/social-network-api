@@ -1,0 +1,19 @@
+{
+    "name": "social-network-api",
+    "version": "1.0.1",
+    "description": "Using parts of MongoDB, Mongoose, and Express to build routes.",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "nodemon index",
+        "start": "node index",
+        "seed": "node utils/seed"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "mongoose": "^7.6.3"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1"
+    }
+}
