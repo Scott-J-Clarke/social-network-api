@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('./config/connection');
 const routes = require('./routes');
 
-const cwd = process.cwd();
+const cwd = process.cwd(); // Is this line necessary?
 
 const PORT = 3001;
 const app = express();
