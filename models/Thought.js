@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Reaction = require('./Reaction'); // Pull in the 'Reaction' schema for the 'reactions' array.
+const dayjs = require('dayjs');
 
 // Schema to create Thought model:
 const thoughtSchema = new Schema(
@@ -13,13 +14,14 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: createdAtVal => moment(createdAtVal).format('YYYY-MM-DD [at] hh:mm a'), // Format date inside
+            get: createdAtVal => dayjs(createdAtVal).format('YYYY-MM-DD'), // Format date (hour/minute is excessive)
         },
         username: {
             type: String,
             required: true
         },
-        reactions: [Reaction] // Array of nested documents created with the 'reactionSchema'
+        // Commented out to seed "User" model:
+        // reactions: [Reaction] // Array of nested documents created with the 'reactionSchema'
     },
     {
         toJSON: {
