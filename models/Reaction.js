@@ -14,9 +14,10 @@ const reactionSchema = new Schema(
     }
 )
 
-schema.path('createdAt').get(function (timestamp) {
-    return moment(timestamp).format('YYYY-MM-DD');
-});
+// Comment out to seed "User" Model:
+// schema.path('createdAt').get(function (timestamp) {
+//     return moment(timestamp).format('YYYY-MM-DD');
+// });
 
 const Reaction = model('Reaction', reactionSchema);
 
