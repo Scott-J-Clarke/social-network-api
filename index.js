@@ -1,7 +1,6 @@
 const express = require('express');
 const db = require('./config/connection');
-// Comment out to try running "User" model and seeding:
-// const routes = require('./routes');
+const routes = require('./routes');
 
 const cwd = process.cwd(); // Is this line necessary?
 
@@ -10,8 +9,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Comment out to try running "User" model and seeding:
-// app.use(routes);
+app.use(routes);
 
 db.once('open', () => {
     app.listen(PORT, () => {

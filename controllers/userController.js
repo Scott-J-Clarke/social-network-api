@@ -6,8 +6,27 @@ module.exports = {
             const users = await User.find();
             res.json(users);
         } catch (err) {
-            console.error({ message: error });
+            console.error({ message: err }); // This should console.log the error message.
             return res.status(500).json(err);
+        }
+    },
+    async getSingleUser(req, res) {
+        try {
+            const user = await User.findOne({ _id: req.params.userId }); // Changed 'postId' to 'userId'
+
+            !user
+                ? res.status(404).json({ message: 'No user with that ID.' })
+                : res.json(user);
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    },
+    async createUser(req, res) {
+        try {
+            const user = await User.create(req.body);
+            res.json(user);
+        } catch (err) {
+            res.status(500).json(err);
         }
     }
 };

@@ -3,9 +3,17 @@ const { Schema, model } = require('mongoose');
 // Schema to create User model:
 const userSchema = new Schema(
     {
-        username: { type: String, unique: true, required: true, trim: true },
+        username: { 
+            type: String, 
+            unique: true, 
+            required: true, 
+            trim: true 
+        },
         email: {
-            type: String, unique: true, required: true, validate: {
+            type: String, 
+            unique: true, 
+            required: true, 
+            validate: {
                 // This is the regex that validates the email address:
                 validator: function (v) {
                     return /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(v);
