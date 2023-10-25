@@ -30,7 +30,7 @@ const userSchema = new Schema(
         friends: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'User', // Will this reference the 'User' model?
+                ref: 'User', // 'friends' field referencs other documents in the 'User' model.
             }
         ]
     }
