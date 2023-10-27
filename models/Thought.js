@@ -28,7 +28,7 @@ const thoughtSchema = new Schema(
             virtuals: true,
             getters: true,
         },
-        id: false, // Changed this from 'false' to see if '_id' could be added to each thought.
+        id: false, 
     }
 )
 
