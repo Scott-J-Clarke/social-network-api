@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
     async getUsers(req, res) {
@@ -11,6 +11,7 @@ module.exports = {
             return res.status(500).json(err);
         }
     },
+    
     async getSingleUser(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId }); // Changed 'postId' to 'userId'
@@ -22,6 +23,7 @@ module.exports = {
             res.status(500).json(err)
         }
     },
+    
     async createUser(req, res) {
         try {
             const user = await User.create(req.body);
@@ -30,6 +32,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
+    
     async updateUser(req, res) {
         try {
             const user = await User.findOneAndUpdate(
@@ -48,18 +51,24 @@ module.exports = {
             res.status(500).json(err);
         }
     },
+    
     async deleteUser(req, res) {
         try {
-            const user = await User.findOneAndRemove({ _id: req.params.userId });
+            const user = await User.findOneAndDelete({ _id: req.params.userId });
 
             if (!user) {
                 return res.status(404).json({ message: 'No user with this ID!' });
             }
-            res.json({ message: 'User successfully deleted!' });
+
+            // Delete all thoughts associated with user:
+            await Thought.deleteMany({ _id: { $in: user.thoughts } });
+
+            res.json({ message: 'User and thoughts successfully deleted!' });
         } catch (err) {
             res.status(500).json(err);
         }
     },
+    
     // Add friend to user 'friends' list using '_id' in req body:
     async addFriend(req, res) {
         try {
@@ -78,6 +87,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
+    
     async deleteFriend(req, res) {
         try {
             const user = await User.findOneAndUpdate(
