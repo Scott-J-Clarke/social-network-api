@@ -14,21 +14,21 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: createdAtVal => dayjs(createdAtVal).format('YYYY-MM-DD'), // Format date (hour/minute is excessive)
+            get: createdAtVal => dayjs(createdAtVal).format('YYYY-MM-DD HH:mm')
         },
         username: {
             type: String,
             required: true
         },
         // Commented out to seed "User" model:
-        // reactions: [Reaction] // Array of nested documents created with the 'reactionSchema'
+        // reactions: [reactionSchema] // Array of nested documents created with the 'reactionSchema'
     },
     {
         toJSON: {
             virtuals: true,
             getters: true,
         },
-        id: false,
+        id: false, // Changed this from 'false' to see if '_id' could be added to each thought.
     }
 )
 
@@ -37,10 +37,13 @@ const thoughtSchema = new Schema(
 //     return moment(timestamp).format('YYYY-MM-DD');
 // });
 
-// Virtual that retrieves the length of the thought's 'reactions' array on query:
-thoughtSchema.virtual('reactionSchema').get(function () {
-    return this.reactions.length;
-});
+// Virtual that retrieves the length of the thought's 'reactions' array on query.
+// Should this be 'reactionSchema.virtual('reactionSchema').get...
+
+// Commented out 'thoughtSchema' while trying to get 'thought routes' working:
+// thoughtSchema.virtual('reactionSchema').get(function () {
+//     return this.reactions.length;
+// });
 
 const Thought = model('Thought', thoughtSchema);
 
