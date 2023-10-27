@@ -1,26 +1,31 @@
+/* eslint-disable no-undef */
 const { Thought, User } = require('../models');
 
 module.exports = {
     async getThoughts(req, res) {
         try {
             const thoughts = await Thought.find();
-            res.json(thoughts);
+
+            return res.status(200).json(thoughts);
         } catch (err) {
-            console.error({ message: err });
             return res.status(500).json(err);
         }
     },
+
     async getSingleThought(req, res) {
         try {
             const thought = await Thought.findOne({ _id: req.params.userId });
-        
-            !thought
-                ? res.status(404).json({ message: 'No thought with that ID.' })
-                : res.json(thought);
-            } catch (err) {
-                res.status(500).json(err)
+
+            if (!thought) {
+                return res.status(404).json({ message: 'No thought with that ID.' });
             }
+
+            res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
     },
+
     async createThought(req, res) {
         try {
             const thought = await Thought.create(req.body);
@@ -31,14 +36,19 @@ module.exports = {
                 { runValidators: true, new: true }
             );
 
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'No user with this ID.' });
+            }
+
             res.json({ message: 'Thought successfully created!' });
         } catch (err) {
             res.status(500).json(err);
         }
     },
+
     async deleteThought(req, res) {
         try {
-            const thought = await Thought.findOneAndRemove({ _id: req.params.thoughtId })
+            const thought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
 
             if (!thought) {
                 return res.status(404).json({ message: 'No thought with this ID.' });
@@ -48,5 +58,5 @@ module.exports = {
         } catch (err) {
             res.status(500).json(err);
         }
-    }
+    },
 };
