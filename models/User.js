@@ -1,6 +1,6 @@
+/* eslint-disable no-undef */
 const { Schema, model } = require('mongoose');
 
-// Schema to create User model:
 const userSchema = new Schema(
     {
         username: { 
@@ -14,7 +14,7 @@ const userSchema = new Schema(
             unique: true, 
             required: true, 
             validate: {
-                // This is the regex that validates the email address:
+                // Regex that validates the email address:
                 validator: function (v) {
                     return /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(v);
                 },
@@ -30,14 +30,20 @@ const userSchema = new Schema(
         friends: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'User', // 'friends' field referencs other documents in the 'User' model.
+                ref: 'User', 
             }
         ]
+    },
+    {
+        toJSON: { 
+            virtuals: true,
+        },
+        id: false
     }
 );
 
 userSchema.virtual('friendCount').get(function () {
-    return this.friends.length; // Should this be 'friends'? Does it reference something else?
+    return this.friends.length; 
 });
 
 const User = model('User', userSchema);

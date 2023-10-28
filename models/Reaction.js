@@ -1,24 +1,37 @@
-// Reaction model will be 'schema-only.'
-// A 'schema-only' model will do data validation and structure, but it won't create an actual collection to store
-// documents of that schema in the db.
+/* eslint-disable no-undef */
+// const { ObjectId } = require('bson');
 
-const { ObjectId } = require('bson');
-const { Schema, model } = require('mongoose');
+const { Schema } = require('mongoose');
+const dayjs = require('dayjs');
 
 const reactionSchema = new Schema(
     {
-        reactionId: { type: Schema.Types.ObjectId, default: new ObjectId },
-        reactionBody: { type: String, required: true, maxLength: 280 },
-        username: { type: String, required: true },
-        createdAt: { type: Date, default: Date.now }
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            maxLength: 280
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: createdAtVal => dayjs(createdAtVal).format("MMM DD, YYYY [at] hh:mm a")
+        },
+    },
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true
+        },
+        id: false
     }
 )
 
-// Comment out to seed "User" Model:
-// schema.path('createdAt').get(function (timestamp) {
-//     return moment(timestamp).format('YYYY-MM-DD');
-// });
-
-const Reaction = model('Reaction', reactionSchema);
-
-module.exports = Reaction;
+module.exports = reactionSchema;
