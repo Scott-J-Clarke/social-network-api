@@ -1,8 +1,8 @@
+/* eslint-disable no-undef */
 const { Schema, model } = require('mongoose');
-const Reaction = require('./Reaction'); // Pull in the 'Reaction' schema for the 'reactions' array.
+const reactionSchema = require('./Reaction');
 const dayjs = require('dayjs');
 
-// Schema to create Thought model:
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -14,14 +14,13 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: createdAtVal => dayjs(createdAtVal).format('YYYY-MM-DD HH:mm')
+            get: createdAtVal => dayjs(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
         },
         username: {
             type: String,
             required: true
         },
-        // Commented out to seed "User" model:
-        // reactions: [reactionSchema] // Array of nested documents created with the 'reactionSchema'
+        reactions: [reactionSchema]
     },
     {
         toJSON: {
@@ -32,18 +31,9 @@ const thoughtSchema = new Schema(
     }
 )
 
-// Getter method to format the timestamp on query:
-// schema.path('createdAt').get(function (timestamp) {
-//     return moment(timestamp).format('YYYY-MM-DD');
-// });
-
-// Virtual that retrieves the length of the thought's 'reactions' array on query.
-// Should this be 'reactionSchema.virtual('reactionSchema').get...
-
-// Commented out 'thoughtSchema' while trying to get 'thought routes' working:
-// thoughtSchema.virtual('reactionSchema').get(function () {
-//     return this.reactions.length;
-// });
+thoughtSchema.virtual('reactionSchema').get(function () {
+    return this.reactions.length;
+});
 
 const Thought = model('Thought', thoughtSchema);
 
