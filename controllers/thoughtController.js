@@ -82,7 +82,7 @@ module.exports = {
                 return res.status(404).json({ message: 'Thought deleted, but no user found.' })
             }
 
-            res.json({ message: "Thought successfully deleted!" });
+            res.json({ message: 'Thought successfully deleted!' });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -102,7 +102,26 @@ module.exports = {
                 return res.status(404).json({ message: 'No thought with this ID.' });
             }
 
-            res.json({ message: "Reaction successfully added!" })
+            res.json({ message: 'Reaction successfully added!' })
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    async deleteReaction(req, res) {
+        try {
+
+            const reaction = await Thought.findOneAndUpdate(
+                { _id: req.params.thoughtId },
+                { $pull: { reactions: { reactionId: req.params.reactionId } } },
+                { runValidators: true, new: true }
+            );
+
+            if (!reaction) {
+                return res.status(404).json({ message: 'Check thought and reaction ID.' });
+            }
+
+            res.json({ message: 'Reaction successfully deleted!' })
         } catch (err) {
             res.status(500).json(err);
         }
